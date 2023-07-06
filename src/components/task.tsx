@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {BlockItem} from './task2';
+import '..//App.css';
 
 interface TimelineProps {
     turnCount: number;
@@ -84,15 +85,8 @@ const Timeline: React.FC<TimelineProps> = (props) => {
                     }}
 
                     onClick={handleClick}
-                    /*
-                    onMouseEnter={(e) => {
-                        e.target.style.backgroundColor = "lightgray";
-                        e.target.style.cursor = "pointer";
-                    }}
-                    onMouseLeave={(e) => {
-                        e.target.style.backgroundColor = "white";
-                        e.target.style.cursor = "default";
-                    }} */
+                    onMouseEnter={(e) => (e.target as HTMLButtonElement).style.backgroundColor = "lightgray"}
+                    onMouseLeave={(e) => (e.target as HTMLButtonElement).style.backgroundColor = "white"}
                 >
                     &gt;&gt;
                 </button>
