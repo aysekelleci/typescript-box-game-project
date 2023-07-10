@@ -1,133 +1,10 @@
 import React, {useState, useEffect, useRef, CSSProperties} from 'react';
 import '..//App.css';
-
-interface BoxProps {
-    color: string;
-    width: number;
-    height: number;
-    percent: number;
-    birth: number;
-    chapter: number;
-    numberValue: number; //maybe it can be deleted
-    index: number;
-    setBoxes: (boxes: BoxProps[]) => void
-    boxes: BoxProps[]
-    onDragStart: (e: React.DragEvent<HTMLDivElement>, index: number) => void;
-    children?: React.ReactNode;
-}
-export const Box: React.FC<BoxProps> = (props) => {
-    const [modalOpen, setModalOpen] = useState(false);
-    const [numberValue, setNumberValue] = useState(props.percent);
-    const [newNumber, setNewNumber] = useState(20);
-    const modalRef = useRef<HTMLDivElement>(null);
-    const boxRef = useRef<HTMLDivElement>(null);
-
-
-    useEffect(() => {
-        const handleClickOutside = (event: MouseEvent) => {
-            if (event.type === 'click') {
-                if (modalRef.current && !(modalRef.current.contains(event.target as Node) || boxRef.current?.contains(event.target as Node))) {
-                    setModalOpen(false);
-                }
-            }
-        };
-
-        window.addEventListener('click', handleClickOutside);
-
-        return () => {
-            window.removeEventListener('click', handleClickOutside);
-        };
-    }, []);
-
-    const handleOpenModal = () => {
-        setModalOpen(true);
-    };
-
-    const handleCloseModal = () => {
-        setModalOpen(false);
-    };
-
-    const handleNumberChange = () => {
-        setModalOpen(false);
-        const updatedNumberValue = Math.round(numberValue * (100 - newNumber) )/100;
-        setNumberValue(updatedNumberValue);
-        const updatedBoxes = [...props.boxes];
-        updatedBoxes[props.index].numberValue = updatedNumberValue;
-
-        props.setBoxes(updatedBoxes);
-
-    };
-
-    const boxStyle: CSSProperties = {
-        backgroundColor: props.color,
-        width: `${props.width}px`,
-        height: `${props.height}px`,
-        marginBottom: '10px',
-        border: '2px solid black',
-        marginRight: '10px',
-        position: 'relative',
-    };
-
-    const circleStyle: CSSProperties = {
-        position: 'absolute',
-        top: '5px',
-        right: '0px',
-        width: '30px',
-        height: '30px',
-        borderRadius: '50%',
-        backgroundColor: '#ffeead',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-    };
-
-    const valueStyle = {
-        fontSize: '12px',
-    };
-
-    const age = props.chapter - props.birth;
-
-    return (
-        <div
-            className="box"
-            ref={boxRef}
-            style={boxStyle}
-            draggable
-            //old version(for react) was onDragStart={props.onDragStart}
-            onDragStart={(e) => props.onDragStart(e, props.index)}
-        >
-
-            <div onClick={handleOpenModal} style={{flex: 'none'}} >
-                <div style={circleStyle}>
-                    <span style={valueStyle}>{age}</span>
-                </div>
-                <span style={{ fontSize: '28px' }}>{numberValue}%</span>
-            </div>
-            {modalOpen && (
-                <div
-                    ref={modalRef}
-                    style={{
-                        backgroundColor: '#ff6f69',
-                        position: 'relative',
-                        left: '0px',
-                        bottom: '20px',
-                        width: '150px',
-                        height: '80px',
-                        border: '3px solid #73AD21',
-                    }}
-                >
-                    <input
-                        type="number"
-                        value={newNumber}
-                        onChange={(e) => setNewNumber(parseInt(e.target.value))}
-                    />
-                    <button onClick={handleNumberChange}>Change</button>
-                </div>
-            )}
-            <br />
-        </div>
-    );
-};
+import ReactECharts from 'echarts-for-react';
+import {Box} from './box';
+import {BoxProps} from './box';
+import {InputBox} from './inputBox';
+import {OutputBox} from './outputBox';
 
 interface BlockItemProps {
     percent: number;
@@ -145,7 +22,6 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
         { color: "#5f8f79", width: 80, height: 80, percent, birth, numberValue: percent, index: 2, chapter: 0, setBoxes: () => {}, boxes: [], onDragStart: () => {}, },
     ]);
 
-
     const [outputBox, setOutputBox] = useState<BoxProps[]>([]);
     let operation = 1;
 
@@ -153,16 +29,40 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
     const [value, setValue] = useState(0);
     const [operationName, setOperationName] = useState('same');
     const [deprecationValue, setDeprecationValue] = useState(0);
-    const [experienceValue, setExperienceValue] = useState(3)
+    const [experienceValue, setExperienceValue] = useState(3);
     const [modalOpen, setModalOpen] = useState(false);
     const operationModalRef = useRef(null);
+
+    let experienceValueArray: number[] = [0];
+    const [experienceModalOpen, setExperienceModalOpen] = useState(false);
+    const graphOption = {
+        xAxis: {
+            data: ['A', 'B', 'C', 'D', 'E']
+        },
+        yAxis: {},
+        series: [
+            {
+                data: [10, 22, 28, 23, 19],
+                type: 'line',
+                areaStyle: {}
+            },
+        ]
+    };
 
     const handleOpenModal = () => {
         setModalOpen(true);
     };
 
+    const handleExperienceOpenModal = () => {
+        setExperienceModalOpen(true);
+    }
+
     const handleCloseModal = () => {
         setModalOpen(false);
+    };
+
+    const handleExperienceCloseModal = () => {
+        setExperienceModalOpen(false);
     };
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = parseInt(event.target.value, 10);
@@ -233,6 +133,8 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
             const updatedBox = [...prevBox];
             updatedBox.splice(boxIndex, 1);
             console.log(updatedBox);
+            for( let i=0; i < updatedBox.length; i++)
+                updatedBox[i].index = i;
             return updatedBox;
         });
 
@@ -248,7 +150,7 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
                 birth: birth,
                 numberValue:percent,
                 setBoxes: () => {},
-                index: 0,
+                index: boxes.length,
                 boxes: [],
                 width: 130,
                 height: 80,
@@ -292,7 +194,7 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
                 birth: birth,
                 numberValue: newValue,
                 setBoxes: () => {},
-                index: 0,
+                index: boxes.length + i,
                 boxes: [],
                 chapter: 0,
                 onDragStart: () => {}
@@ -300,7 +202,6 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
             newBoxes.push(newBox);
         }
         setOutputBox(newBoxes);
-        console.log(newBoxes);
 
         setInputBox([]);
     };
@@ -344,13 +245,13 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
         }
         setDeprecationValue(deprecationValue + length)
         setExperienceValue(experienceValue);
+        experienceValueArray.push(experienceValue)
 
         //for each delete input boxes and create new ones
     }
 
 
     return (
-        //<div  style={{ display: 'grid', gridTemplateColumns: '0.5fr 1fr 0.1fr 2fr', gap: '10px' }}>
         <div style={{display: 'flex',  marginTop: '30px'}} >
             <div style={{ marginRight: '80px', flex: '0 0 auto' }} onDrop={handleOutputBoxDrop} onDragOver={handleDragOver}>
                 <div
@@ -417,8 +318,8 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
             <div style={{display: 'flex', overflowX: 'scroll'}} >
                 <InputBox onDrop={handleDrop} inputBox={inputBox} birth={birth}/>
 
-                <div style={{marginLeft: '40px', marginRight: '60px'}}>
-                    <p style={{ marginTop: '30px', margin: -10, marginBottom: '0px', boxSizing: 'inherit', fontSize: '14px'}} > value: {value}</p>
+                <div style={{marginLeft: '40px', marginRight: '60px', marginTop: '30px'}}>
+                    <p style={{ marginTop: '0px', margin: -10, marginBottom: '0px', boxSizing: 'inherit', fontSize: '14px'}} > value: {value}</p>
 
                     <input
                         style={{width: '200px'}}
@@ -443,13 +344,14 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
 
                         <p style={{ margin: 0, marginBottom: '15px', boxSizing: 'inherit', backgroundColor: '#999999'}} > Operation Box </p>
 
-                        <p style={{ margin: 0, marginBottom: '3px', boxSizing: 'inherit', fontSize: '24px'}}
+                        <p style={{ margin: 0, marginBottom: '3px', boxSizing: 'inherit', fontSize: '24px', cursor: '-webkit-grab'}}
                            onClick={handleOpenModal}>
                             Deprecation: {deprecationValue}%
                         </p>
                         <hr></hr>
 
-                        <p style={{ margin: 0, marginBottom: '3px', boxSizing: 'inherit', fontSize: '24px'}} >
+                        <p style={{ margin: 0, marginBottom: '3px', boxSizing: 'inherit', fontSize: '24px', cursor: '-webkit-grab'}}
+                           onClick={handleExperienceOpenModal}>
                             Experience: {experienceValue}%
                         </p>
                         <hr></hr>
@@ -476,12 +378,12 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
                                     value={deprecationValue}
                                     onChange={(e) => setDeprecationValue(parseInt(e.target.value))}
                                 />
-                                <button onClick={handleCloseModal}>Change</button>
                                 <button onClick={handleCloseModal}>Close</button>
                             </div>
                         )}
 
                     </div>
+
                     <button
                         style={{
                             marginTop: "10px",
@@ -500,6 +402,35 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
                     >
                         &gt;&gt;
                     </button>
+
+                    {experienceModalOpen && (
+                        <div
+                            ref={operationModalRef}
+                            style={{
+                                backgroundColor: '#ff6f69',
+                                position: 'relative',
+                                left: '80px',
+                                bottom: '200px',
+                                width: '450px',
+                                height: '500px',
+                                border: '3px solid #73AD21',
+                            }}
+                        >
+                            <input
+                                type="number"
+                                value={deprecationValue}
+                                onChange={(e) => setDeprecationValue(parseInt(e.target.value))}
+                            />
+                            <button onClick={handleExperienceCloseModal}>Change</button>
+                            <button onClick={handleExperienceCloseModal}>Close</button>
+
+                            <ReactECharts
+                                option={graphOption}
+                                style={{ height: 400 }}
+                                // opts={{ locale: 'FR' }}
+                            />
+                        </div>
+                    )}
                 </div>
 
                 <OutputBox outputBoxes={outputBox} birth={birth} />
@@ -507,148 +438,6 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
         </div>
     );
 };
-
-interface InputBoxProps {
-    onDrop: (boxIndex: number) => void;
-    inputBox: BoxProps[];
-    birth: number;
-}
-
-const InputBox: React.FC<InputBoxProps> = ({ onDrop, inputBox, birth }) => {
-    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        let boxIndex:number = parseInt(event.dataTransfer.getData('text/plain'));
-
-        const droppedBoxIndex = boxIndex; // Convert boxIndex to an integer
-        const currentBoxIndex = inputBox.findIndex((box) => box.index === droppedBoxIndex); // Use appropriate condition to match the dropped box ID or index
-
-        if (currentBoxIndex === -1) {
-            // Box not found in the array, handle the error or return early
-            console.log('heyyo');
-            onDrop(boxIndex); // Convert boxIndex to an integer
-            return;
-        }
-
-        boxIndex = -1;
-        onDrop(boxIndex); // Convert boxIndex to an integer
-    };
-
-    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-    };
-
-    return (
-        <div onDrop={handleDrop} onDragOver={handleDragOver}>
-            <div
-                style={{
-                    width: '300px',
-                    height: '320px',
-                    backgroundColor: '#EEEEEE',
-                    border: '2px groove',
-                    borderStyle: 'double',
-                    borderWidth: '10px',
-                    overflow: 'auto',
-                }}
-            >
-                <p
-                    style={{
-                        margin: 0,
-                        marginBottom: '3px',
-                        boxSizing: 'inherit',
-                    }}
-                >
-                    Input Box
-                </p>
-                <div style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column-reverse' }}>
-                    {inputBox.map((box, index) => (
-                        <Box
-                            setBoxes={() => {}} index={index} boxes={[]}
-                            color="#ffcc5c"
-                            width={130}
-                            height={80}
-                            birth={box.birth} // {box.birth} - {birth}
-                            percent={box.numberValue}
-                            numberValue={10}
-                            chapter={birth}
-                            onDragStart={() => {}}
-                        >
-                            <th></th>
-                        </Box>
-
-                    ))}
-                </div>
-            </div>
-        </div>
-    );
-};
-
-
-interface OutputBoxProps {
-    outputBoxes: BoxProps[];
-    birth: number;
-}
-
-const OutputBox: React.FC<OutputBoxProps>= ({ outputBoxes, birth}) => {
-    const handleDragStart = (event:React.DragEvent<HTMLDivElement>, index:string) => {
-        event.dataTransfer.setData('text/plain', index);
-    };
-    return (
-        <div>
-            <div
-                style={{
-                    width: '300px',
-                    height: '320px',
-                    backgroundColor: '#EEEEEE',
-                    border: '2px groove ',
-                    borderStyle: 'double',
-                    borderWidth: '10px',
-                    overflow: 'auto',
-                }}
-            >
-                <p
-                    style={{
-                        margin: 0,
-                        marginBottom: '3px',
-                        boxSizing: 'inherit',
-                    }}
-                >
-                    Output Box
-                </p>
-                <div style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column-reverse'}}>
-                    {outputBoxes.map((box, index) => (
-
-                        <Box
-                            setBoxes={() => {}} index={index} boxes={[]}
-                            color="#ff6f69"
-                            width={130}
-                            height={80}
-                            birth= {box.birth}  //{box.birth} - {birth}
-                            percent={box.percent}
-                            numberValue={10}
-                            chapter={birth}
-                            onDragStart={(event) => handleDragStart(event, index.toString())}
-
-                        >
-                            <th></th>
-                        </Box>
-                    ))}
-                </div>
-            </div>
-
-        </div>
-    );
-};
-
-
-
-
-
-
-
-
-
-
-
 
 
 
