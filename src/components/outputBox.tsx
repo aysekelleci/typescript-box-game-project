@@ -1,4 +1,4 @@
-import {Box, BoxProps} from "./box";
+import {Box, BoxProps} from "./atomicComponents/box";
 import React from "react";
 
 interface OutputBoxProps {

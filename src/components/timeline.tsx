@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {BlockItem} from './task2';
+import {BoxMechanism} from './boxMechanism';
 import '..//App.css';
 
 interface TimelineProps {
@@ -94,9 +94,7 @@ const Timeline: React.FC<TimelineProps> = (props) => {
             </div>
 
             <br></br>
-            <div>
-                <BlockItem percent={30} birth={chapter*props.turnCount+ turn} onYearChange={handleClick} />
-            </div>
+
 
         </div>
     );
