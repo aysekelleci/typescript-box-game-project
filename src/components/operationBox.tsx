@@ -17,28 +17,32 @@ export const OperationBox: React.FC<OperationBoxProps>= (props) => {
     const [modalOpen, setModalOpen] = useState(false);
     const operationModalRef = useRef(null);
 
+    const [modalStatisticsOpen, setModalStatisticsOpen] = useState(false);
+
     const [deprecationValue, setDeprecationValue] = useState(0);
     const [experienceValue, setExperienceValue] = useState(0);
     const [operationName, setOperationName] = useState('same');
 
-    let experienceValueArray: number[] = [0];
+    const [experienceValueArray, setExperienceValueArray ]= useState([0]);
+    const [tourArray, setTourArray] = useState([0]);
     let operation = 1;
 
     // MANUAL SLIDER
     const [experienceModalOpen, setExperienceModalOpen] = useState(false);
-    const graphOption = {
+
+    const [graphOption, setGraphOption] = useState({
         xAxis: {
-            data: ['A', 'B', 'C', 'D', 'E']
+            data: experienceValueArray
         },
         yAxis: {},
         series: [
             {
-                data: [10, 22, 28, 23, 19],
-                type: 'line',
-                areaStyle: {}
+                data: experienceValueArray,
+                type: 'line'
             },
         ]
-    };
+    })
+
 
     const handleOpenModal = () => {
         setModalOpen(true);
@@ -54,6 +58,13 @@ export const OperationBox: React.FC<OperationBoxProps>= (props) => {
     const handleExperienceCloseModal = () => {
         setExperienceModalOpen(false);
     };
+
+    const handleStatisticsOpenModal = () => {
+        setModalStatisticsOpen( true)
+    }
+    const handleStatisticsCloseModal = () => {
+        setModalStatisticsOpen( false)
+    }
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const newValue = parseInt(event.target.value, 10);
@@ -155,9 +166,22 @@ export const OperationBox: React.FC<OperationBoxProps>= (props) => {
         }
         setDeprecationValue(deprecationValue + length)
         setExperienceValue(experienceValue);
-        experienceValueArray.push(experienceValue)
 
-        //for each delete input boxes and create new ones
+        setTourArray([...tourArray, experienceValueArray.length]);
+        setExperienceValueArray([...experienceValueArray, experienceValue]);
+
+        console.log(experienceValueArray);
+
+        setGraphOption({xAxis: {
+                data: [...tourArray, experienceValueArray.length]
+            },
+            yAxis: {},
+            series: [
+                {
+                    data: [...experienceValueArray, experienceValue],
+                    type: 'line'
+                },
+            ]})
     }
 
     return (
@@ -197,7 +221,11 @@ export const OperationBox: React.FC<OperationBoxProps>= (props) => {
                    onClick={handleExperienceOpenModal}>
                     Experience: {experienceValue}%
                 </p>
-                
+                <p style={{ margin: 0, marginBottom: '3px', boxSizing: 'inherit', fontSize: '16px', cursor: '-webkit-grab'}}
+                   onClick={handleStatisticsOpenModal}>
+                    Statistics
+                </p>
+
                 <hr></hr>
 
                 <p style={{ margin: 0, marginBottom: '3px', boxSizing: 'inherit', fontSize: '24px'}} >
@@ -213,7 +241,7 @@ export const OperationBox: React.FC<OperationBoxProps>= (props) => {
                             left: '80px',
                             bottom: '130px',
                             width: '180px',
-                            height: '100px',
+                            height: '80px',
                             border: '3px solid #73AD21',
                         }}
                     >
@@ -255,24 +283,42 @@ export const OperationBox: React.FC<OperationBoxProps>= (props) => {
                         position: 'relative',
                         left: '80px',
                         bottom: '200px',
-                        width: '450px',
-                        height: '500px',
+                        width: '150px',
+                        height: '80px',
                         border: '3px solid #73AD21',
                     }}
                 >
                     <input
                         type="number"
                         value={deprecationValue}
-                        onChange={(e) => setDeprecationValue(parseInt(e.target.value))}
+                        onChange={(e) => setExperienceValue(parseInt(e.target.value))}
                     />
                     <button onClick={handleExperienceCloseModal}>Change</button>
                     <button onClick={handleExperienceCloseModal}>Close</button>
 
+                </div>
+            )}
+
+            {modalStatisticsOpen && (
+                <div
+                    ref={operationModalRef}
+                    style={{backgroundColor: '#ffcc5c',
+                        position: 'relative',
+                        left: '80px',
+                        bottom: '200px',
+                        width: '450px',
+                        height: '400px',
+                        border: '3px solid #73AD21',
+                }}
+                >
+
                     <ReactECharts
                         option={graphOption}
-                        style={{ height: 400 }}
+                        style={{ height: 350 }}
                         // opts={{ locale: 'FR' }}
                     />
+
+                    <button onClick={handleStatisticsCloseModal}>Close</button>
                 </div>
             )}
         </div>

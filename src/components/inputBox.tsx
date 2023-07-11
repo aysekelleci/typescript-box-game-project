@@ -8,6 +8,11 @@ export interface InputBoxProps {
 }
 
 export const InputBox: React.FC<InputBoxProps> = ({ onDrop, inputBox, birth }) => {
+
+    const handleDragStart = (event: React.DragEvent<HTMLDivElement>, index:number) => {
+        event.dataTransfer.setData('text/plain', index.toString());
+    };
+
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
         let boxIndex:number = parseInt(event.dataTransfer.getData('text/plain'));
@@ -55,7 +60,8 @@ export const InputBox: React.FC<InputBoxProps> = ({ onDrop, inputBox, birth }) =
                             percent={box.numberValue}
                             numberValue={10}
                             chapter={birth}
-                            onDragStart={() => {}}
+                            onDragStart={(event) =>
+                                handleDragStart(event , index)}
                         >
                             <th></th>
                         </Box>

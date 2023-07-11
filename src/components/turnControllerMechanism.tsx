@@ -7,10 +7,13 @@ interface TurnControllerMechanismProps {
     turn: number
     chapter: number
     width: string
+    setTurn:( counter:number) => void;
+    setChapter: ( chapter:number) => void;
 }
 const TurnControllerMechanism: React.FC<TurnControllerMechanismProps> = (props) => {
 
     const [value, setValue] = useState(0);
+
 
     return (
         <div className="App">
@@ -20,10 +23,12 @@ const TurnControllerMechanism: React.FC<TurnControllerMechanismProps> = (props) 
             }}>
 
                 <TimeLine
-                    turnCount={4}
-                    turn={6}
-                    chapter={1}
+                    turnCount={props.turnCount}
+                    turn={props.turn}
+                    chapter={props.chapter}
                     width="300px"
+                    setTurn={props.setTurn}
+                    setChapter={props.setChapter}
                 />
 
                 <ManualSlider value={value} setValue={setValue} />

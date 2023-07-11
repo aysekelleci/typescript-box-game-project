@@ -7,22 +7,22 @@ interface TimelineProps {
     turn: number;
     chapter: number;
     width: string;
+    setTurn:( counter:number) => void;
+    setChapter: ( chapter:number) => void;
 }
 
 const Timeline: React.FC<TimelineProps> = (props) => {
-    const [turn, setTurn] = useState(props.turn % props.turnCount);
-    const [chapter, setChapter] = useState(props.chapter + Math.floor(props.turn / props.turnCount));//const [colors, setColors] = useState(['#ffffff','#ffffff', '#ffffff','#ffffff', '#ffffff','#ffffff'])
 
     const percent = 100/ props.turnCount;
     const width = props.width;
 
     function handleClick() {
-        if (turn >= props.turnCount) {
-            setTurn(1);
-            setChapter(chapter + 1);
+        if (props.turn >= props.turnCount) {
+            props.setTurn(1);
+            props.setChapter(props.chapter + 1);
         }
         else {
-            setTurn(turn + 1);
+            props.setTurn(props.turn + 1);
         }
     }
 
@@ -43,7 +43,7 @@ const Timeline: React.FC<TimelineProps> = (props) => {
                         marginBottom: "3px",
                         boxSizing: "inherit",
                     }}>
-                        FASIL {chapter}
+                        FASIL {props.chapter}
                     </p>
 
                     <div style={{
@@ -55,7 +55,7 @@ const Timeline: React.FC<TimelineProps> = (props) => {
                         overflow: "hidden",
                     }}>
                         {
-                            Array.from({ length: turn }, (v, i) => i).map((index) => (
+                            Array.from({ length: props.turn }, (v, i) => i).map((index) => (
                                 <div style={{
 
                                     minWidth: "60px",

@@ -1,13 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import TurnControllerMechanism from './components/turnControllerMechanism';
 import {BoxMechanism} from "./components/boxMechanism";
 
 const App: React.FC = () => {
-    const chapter:number= 1;
-    const turn = 6;
+    const chapterInit:number= 1;
+    const turnInit = 1;
     const turnCount = 4;
     const width = "300px"
+
+    const [turn, setTurn] = useState(turnInit % turnCount);
+    const [chapter, setChapter] = useState(chapterInit + Math.floor(turnInit / turnCount));
 
   return (
 
@@ -16,7 +19,10 @@ const App: React.FC = () => {
           <TurnControllerMechanism turnCount={turnCount}
                                    turn={turn}
                                    chapter={chapter}
-                                   width= {width}/>
+                                   width= {width}
+                                   setTurn={setTurn}
+                                   setChapter={setChapter}
+              />
 
 
 

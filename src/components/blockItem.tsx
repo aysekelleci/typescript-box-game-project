@@ -7,6 +7,7 @@ interface BlockItemProps {
     setInputBox: (inputBoxes: BoxProps[]) => void;
     setBoxes: (boxes: BoxProps[]) => void;
     outputBox: BoxProps[];
+    inputBox: BoxProps[];
     boxes: BoxProps[];
     setBoxCounter:( counter:number) => void;
     boxCounter: number
@@ -27,37 +28,40 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
 
         const droppedBox: BoxProps = props.outputBox[boxIndex];
 
-        if (droppedBox === undefined) {
+        if (droppedBox != undefined) {
+            const updatedOutputBoxes: BoxProps[] = [...props.outputBox];
+            updatedOutputBoxes.splice(boxIndex, 1);
+
+            props.setOutputBox((updatedOutputBoxes));
+
+            //setBlock items
+            setUpdatedBoxes((prevBoxes) => [
+                ...prevBoxes,
+                {...droppedBox, percent: props.outputBox[boxIndex].numberValue}, // Update the percent value
+            ]);
+
+            props.setBoxes([...props.boxes, {...droppedBox, percent: props.outputBox[boxIndex].numberValue}]);
+            props.setBoxCounter(props.boxCounter + 1);
+        }
+
+        //input to block item drop
+        const droppedBox2: BoxProps = props.inputBox[boxIndex];
+        console.log(droppedBox2, boxIndex);
+        if (droppedBox2 != undefined) {
+
+            const updatedInputBoxes: BoxProps[] = [...props.inputBox];
+            updatedInputBoxes.splice(boxIndex, 1);
+
+            props.setInputBox((updatedInputBoxes));
+
+            props.setBoxes([...props.boxes, {...droppedBox2, percent: props.inputBox[boxIndex].numberValue}]);
+            props.setBoxCounter(props.boxCounter + 1);
             return;
         }
 
-        /*
-        props.setOutputBox((prevBoxes: BoxProps[]) => {
-            const updatedBoxes = [...prevBoxes];
-            updatedBoxes.splice(boxIndex, 1);
-            return updatedBoxes;
-        });
-
-
-        setBoxes((prevBoxes) =>  [
-            ...prevBoxes,
-            { ...droppedBox, percent: outputBox[boxIndex].numberValue }, // Update the percent value
-        ]);
-         */
-
-        const updatedOutputBoxes: BoxProps[] = [...props.outputBox];
-        updatedOutputBoxes.splice(boxIndex, 1);
-
-        props.setOutputBox((updatedOutputBoxes));
-
-        //setBlock items
-        setUpdatedBoxes((prevBoxes) => [
-            ...prevBoxes,
-            {...droppedBox, percent: props.outputBox[boxIndex].numberValue}, // Update the percent value
-        ]);
-
-        props.setBoxes([...props.boxes, {...droppedBox, percent: props.outputBox[boxIndex].numberValue} ]);
-        props.setBoxCounter( props.boxCounter + 1);
+        else {
+            return;
+        }
     }
 
     function handleClick() {
@@ -78,7 +82,6 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
         };
 
         props.setBoxes([...props.boxes, newBox]);
-
     }
 
     return (
