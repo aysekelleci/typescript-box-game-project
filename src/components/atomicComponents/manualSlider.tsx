@@ -2,6 +2,7 @@ import React, {useState} from "react";
 interface manualSliderProps {
     value: number
     setValue: (value: number) => void
+    text: string
 }
 
 const manualSlider: React.FC<manualSliderProps>= (props) => {
@@ -16,7 +17,7 @@ const manualSlider: React.FC<manualSliderProps>= (props) => {
     return (
         <div style={{display: 'flex', marginTop: '-30px'}}>
             <p style={{ marginTop: '0px', margin: 0, marginBottom: '0px', boxSizing: 'inherit', fontSize: '14px', fontWeight: 'bold'}} >
-                Permeability: {props.value}</p>
+                {props.text}: {props.value}</p>
 
             <input
                 style={{width: '200px'}}

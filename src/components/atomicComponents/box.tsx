@@ -54,7 +54,6 @@ export const Box: React.FC<BoxProps> = (props) => {
         updatedBoxes[props.index].numberValue = updatedNumberValue;
 
         props.setBoxes(updatedBoxes);
-
     };
 
     const boxStyle: CSSProperties = {

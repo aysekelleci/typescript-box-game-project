@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {BoxMechanism} from './boxMechanism';
-import '..//App.css';
+import {BoxMechanism} from '../boxMechanism';
+import '../../App.css';
+import {BoxProps} from "./box";
 
 interface TimelineProps {
     turnCount: number;
@@ -9,6 +10,9 @@ interface TimelineProps {
     width: string;
     setTurn:( counter:number) => void;
     setChapter: ( chapter:number) => void;
+    boxes: BoxProps[];
+    setBoxes: (boxes: BoxProps[]) => void;
+    value: number;
 }
 
 const Timeline: React.FC<TimelineProps> = (props) => {
@@ -20,6 +24,13 @@ const Timeline: React.FC<TimelineProps> = (props) => {
         if (props.turn >= props.turnCount) {
             props.setTurn(1);
             props.setChapter(props.chapter + 1);
+            let updatedBoxes = [...props.boxes];
+            for(let i=updatedBoxes.length-1; i>=0; i--) {
+                if(updatedBoxes[i].numberValue < props.value) {
+                    updatedBoxes.splice(i, 1);
+                }
+            }
+            props.setBoxes(updatedBoxes);
         }
         else {
             props.setTurn(props.turn + 1);
@@ -57,7 +68,6 @@ const Timeline: React.FC<TimelineProps> = (props) => {
                         {
                             Array.from({ length: props.turn }, (v, i) => i).map((index) => (
                                 <div style={{
-
                                     minWidth: "60px",
                                     width: `${percent}%`,
                                     height: "100%",
@@ -94,7 +104,6 @@ const Timeline: React.FC<TimelineProps> = (props) => {
             </div>
 
             <br></br>
-
 
         </div>
     );

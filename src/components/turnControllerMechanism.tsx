@@ -1,6 +1,7 @@
-import TimeLine from "./timeline";
+import TimeLine from "./atomicComponents/timeline";
 import React, {useState} from "react";
-import ManualSlider from "./manualSlider"
+import ManualSlider from "./atomicComponents/manualSlider"
+import {BoxProps} from "./atomicComponents/box";
 
 interface TurnControllerMechanismProps {
     turnCount: number
@@ -9,6 +10,8 @@ interface TurnControllerMechanismProps {
     width: string
     setTurn:( counter:number) => void;
     setChapter: ( chapter:number) => void;
+    boxes: BoxProps[];
+    setBoxes: (boxes: BoxProps[]) => void;
 }
 const TurnControllerMechanism: React.FC<TurnControllerMechanismProps> = (props) => {
 
@@ -29,9 +32,12 @@ const TurnControllerMechanism: React.FC<TurnControllerMechanismProps> = (props) 
                     width="300px"
                     setTurn={props.setTurn}
                     setChapter={props.setChapter}
+                    boxes={props.boxes}
+                    setBoxes={props.setBoxes}
+                    value={value}
                 />
 
-                <ManualSlider value={value} setValue={setValue} />
+                <ManualSlider value={value} setValue={setValue} text={'Permeability'}/>
             </div>
             <br/>
 

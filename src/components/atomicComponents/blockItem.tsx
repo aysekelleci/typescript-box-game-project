@@ -1,6 +1,6 @@
-import '..//App.css';
+import '../../App.css';
 import React, {useState} from "react";
-import {Box, BoxProps} from "./atomicComponents/box";
+import {Box, BoxProps} from "./box";
 
 interface BlockItemProps {
     setOutputBox: (outputBoxes: BoxProps[]) => void;

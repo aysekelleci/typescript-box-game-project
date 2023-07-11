@@ -1,6 +1,7 @@
-import {BoxProps} from "./atomicComponents/box";
+import {BoxProps} from "./box";
 import React, {useRef, useState} from "react";
 import ReactECharts from "echarts-for-react";
+import ManualSlider from "./manualSlider";
 
 interface OperationBoxProps {
     inputBox: BoxProps[];
@@ -186,20 +187,12 @@ export const OperationBox: React.FC<OperationBoxProps>= (props) => {
 
     return (
         <div style={{marginLeft: '40px', marginRight: '60px', marginTop: '30px'}}>
-            <p style={{ marginTop: '0px', margin: -10, marginBottom: '0px', boxSizing: 'inherit', fontSize: '14px'}} > value: {props.value}</p>
 
-            <input
-                style={{width: '200px'}}
-                type="range"
-                min="0"
-                max="100"
-                value={props.value}
-                onChange={handleChange}
-                className="slider"
-            />
+            <ManualSlider value={props.value} setValue={props.setValue} text={'Value'}/>
 
             <div
                 style={{
+                    marginTop: '20px',
                     width: '300px',
                     height: '250px',
                     backgroundColor: '#ffeead',
