@@ -1,4 +1,4 @@
-import {Box, BoxProps} from "./box";
+import {Box, BoxProps} from "./Box";
 import React from "react";
 
 interface OutputBoxProps {
@@ -10,7 +10,6 @@ export const OutputBox: React.FC<OutputBoxProps>= ({ outputBoxes, birth}) => {
     const handleDragStart = (event:React.DragEvent<HTMLDivElement>, index:string) => {
         const data = "output " + index;
         event.dataTransfer.setData('text/plain', data);
-        //event.dataTransfer.setData('text', "output");
     };
     return (
         <div>

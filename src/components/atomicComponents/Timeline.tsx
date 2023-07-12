@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import {BoxMechanism} from '../boxMechanism';
+import React from 'react';
 import '../../App.css';
-import {BoxProps} from "./box";
+import {BoxProps} from "./Box";
 
 interface TimelineProps {
     turnCount: number;
@@ -107,7 +106,6 @@ const Timeline: React.FC<TimelineProps> = (props) => {
                 </button>
 
             </div>
-
             <br></br>
 
         </div>

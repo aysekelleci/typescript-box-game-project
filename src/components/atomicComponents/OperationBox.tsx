@@ -1,7 +1,7 @@
-import {BoxProps} from "./box";
+import {BoxProps} from "./Box";
 import React, {useRef, useState} from "react";
 import ReactECharts from "echarts-for-react";
-import ManualSlider from "./manualSlider";
+import ManualSlider from "./ManualSlider";
 
 interface OperationBoxProps {
     inputBox: BoxProps[];
@@ -9,6 +9,7 @@ interface OperationBoxProps {
     setInputBox: (inputBoxes: BoxProps[]) => void
     birth: number
     boxes: BoxProps[];
+    outputBox: BoxProps[];
     value: number;
     setValue: (value: number) => void
     key: number;
@@ -85,7 +86,6 @@ export const OperationBox: React.FC<OperationBoxProps>= (props) => {
             setOperationName('more');
     };
 
-
     const calculateTotalNumberValue = () => {
         let totalNumberValue = 0;
 
@@ -127,7 +127,8 @@ export const OperationBox: React.FC<OperationBoxProps>= (props) => {
             };
             newBoxes.push(newBox);
         }
-        props.setOutputBox(newBoxes);
+        //props.setOutputBox(newBoxes);
+        props.setOutputBox([...props.outputBox, ...newBoxes]);
 
         props.setInputBox([]);
         props.setKey(props.key+1);
@@ -192,7 +193,7 @@ export const OperationBox: React.FC<OperationBoxProps>= (props) => {
     return (
         <div style={{marginLeft: '40px', marginRight: '60px', marginTop: '30px'}}>
 
-            <ManualSlider value={props.value} setValue={props.setValue} text={'Value'}/>
+            <ManualSlider value={props.value} text={'Value'} handleChange={handleChange}/>
 
             <div
                 style={{

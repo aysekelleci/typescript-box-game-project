@@ -1,7 +1,6 @@
 import '../../App.css';
-import React, {useState} from "react";
-import {Box, BoxProps} from "./box";
-import { v4 as uuidv4 } from 'uuid';
+import React from "react";
+import {Box, BoxProps} from "./Box";
 
 interface BlockItemProps {
     setOutputBox: (outputBoxes: BoxProps[]) => void;
@@ -25,7 +24,7 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
     };
-    const handleOutputBoxDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    const handleBoxDrop = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
 
         //const boxIndex: number = parseInt(event.dataTransfer.getData('text/plain'));
@@ -37,7 +36,7 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
         //const boxType: string = event.dataTransfer.getData('text')
         if( type === 'output') {
             const droppedBox: BoxProps = props.outputBox[boxIndex];
-            if (droppedBox != undefined) {
+            if (droppedBox !== undefined) {
                 const updatedOutputBoxes: BoxProps[] = [...props.outputBox];
                 updatedOutputBoxes.splice(boxIndex, 1);
 
@@ -52,7 +51,7 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
         if( type === 'input') {
             //input to block item drop
             const droppedBox2: BoxProps = props.inputBox[boxIndex];
-            if (droppedBox2 != undefined) {
+            if (droppedBox2 !== undefined) {
 
                 const updatedInputBoxes: BoxProps[] = [...props.inputBox];
                 updatedInputBoxes.splice(boxIndex, 1);
@@ -93,7 +92,7 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
     }
 
     return (
-        <div style={{ marginRight: '80px', flex: '0 0 auto' }} onDrop={handleOutputBoxDrop} onDragOver={handleDragOver}>
+        <div style={{ marginRight: '80px', flex: '0 0 auto' }} onDrop={handleBoxDrop} onDragOver={handleDragOver}>
             <div
                 style={{
                     width: '170px',

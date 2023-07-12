@@ -1,4 +1,4 @@
-import {Box, BoxProps} from "./box";
+import {Box, BoxProps} from "./Box";
 import React from "react";
 
 export interface InputBoxProps {
@@ -12,7 +12,6 @@ export const InputBox: React.FC<InputBoxProps> = ({ onDrop, inputBox, birth }) =
     const handleDragStart = (event: React.DragEvent<HTMLDivElement>, index:number) => {
         const data = 'input ' + index.toString();
         event.dataTransfer.setData('text/plain', data);
-        //event.dataTransfer.setData('text', "input");
     };
 
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {

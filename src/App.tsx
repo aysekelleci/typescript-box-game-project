@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
 import './App.css';
-import TurnControllerMechanism from './components/turnControllerMechanism';
-import {BoxMechanism} from "./components/boxMechanism";
-import {BoxProps} from "./components/atomicComponents/box";
-import {v4 as uuidv4} from "uuid";
+import TurnControllerMechanism from './components/TurnControllerMechanism';
+import {BoxMechanism} from "./components/BoxMechanism";
+import {BoxProps} from "./components/atomicComponents/Box";
 
 const App: React.FC = () => {
     const chapterInit:number= 1;

@@ -1,5 +1,4 @@
 import React, {CSSProperties, useEffect, useRef, useState} from "react";
-import {v4 as uuidv4} from "uuid";
 
 export interface BoxProps {
     color: string;

@@ -1,12 +1,10 @@
-import React, {useState, useEffect, useRef, CSSProperties} from 'react';
+import React, {useState} from 'react';
 import '..//App.css';
-import ReactECharts from 'echarts-for-react';
-import {Box} from './atomicComponents/box';
-import {BoxProps} from './atomicComponents/box';
-import {InputBox} from './atomicComponents/inputBox';
-import {OutputBox} from './atomicComponents/outputBox';
-import {OperationBox} from "./atomicComponents/operationBox";
-import {BlockItem} from "./atomicComponents/blockItem";
+import {BoxProps} from './atomicComponents/Box';
+import {InputBox} from './atomicComponents/InputBox';
+import {OutputBox} from './atomicComponents/OutputBox';
+import {OperationBox} from "./atomicComponents/OperationBox";
+import {BlockItem} from "./atomicComponents/BlockItem";
 
 interface BoxMechanismProps {
     percent: number;
@@ -44,7 +42,7 @@ export const BoxMechanism: React.FC<BoxMechanismProps> = (props) => {
 
         if( type === 'output') {
             const droppedBox2: BoxProps = outputBox[boxIndex];
-            if (droppedBox2 != undefined) {
+            if (droppedBox2 !== undefined) {
                 const updatedOutputBoxes: BoxProps[] = [...outputBox];
                 updatedOutputBoxes.splice(boxIndex, 1);
 
@@ -101,7 +99,7 @@ export const BoxMechanism: React.FC<BoxMechanismProps> = (props) => {
                 <InputBox onDrop={handleDrop} inputBox={inputBox} birth={birth}/>
 
                 <OperationBox inputBox={inputBox} setOutputBox={setOutputBox} setInputBox={setInputBox} birth={birth}
-                    boxes={props.boxes} value={value} setValue={setValue} key={props.key} setKey={props.setKey}/>
+                    boxes={props.boxes} value={value} setValue={setValue} key={props.key} setKey={props.setKey} outputBox={outputBox}/>
 
                 <OutputBox outputBoxes={outputBox} birth={birth} />
             </div>

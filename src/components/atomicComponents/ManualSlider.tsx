@@ -1,18 +1,11 @@
 import React, {useState} from "react";
 interface manualSliderProps {
     value: number
-    setValue: (value: number) => void
     text: string
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const manualSlider: React.FC<manualSliderProps>= (props) => {
-
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const newValue = parseInt(event.target.value, 10);
-        if (!isNaN(newValue) && newValue >= -100 && newValue <= 100) {
-            props.setValue(newValue);
-        }
-    };
+const ManualSlider: React.FC<manualSliderProps>= (props) => {
 
     return (
         <div style={{display: 'flex', marginTop: '-30px'}}>
@@ -25,10 +18,10 @@ const manualSlider: React.FC<manualSliderProps>= (props) => {
                 min="0"
                 max="100"
                 value={props.value}
-                onChange={handleChange}
+                onChange={props.handleChange}
                 className="slider"
             />
         </div>
     );
-}; export default manualSlider;
+}; export default ManualSlider;
 

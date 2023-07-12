@@ -1,7 +1,7 @@
-import TimeLine from "./atomicComponents/timeline";
+import TimeLine from "./atomicComponents/Timeline";
 import React, {useState} from "react";
-import ManualSlider from "./atomicComponents/manualSlider"
-import {BoxProps} from "./atomicComponents/box";
+import ManualSlider from "./atomicComponents/ManualSlider"
+import {BoxProps} from "./atomicComponents/Box";
 
 interface TurnControllerMechanismProps {
     turnCount: number
@@ -17,6 +17,12 @@ const TurnControllerMechanism: React.FC<TurnControllerMechanismProps> = (props) 
 
     const [value, setValue] = useState(0);
 
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const newValue = parseInt(event.target.value, 10);
+        if (!isNaN(newValue) && newValue >= -100 && newValue <= 100) {
+            setValue(newValue);
+        }
+    };
 
     return (
         <div className="App">
@@ -37,7 +43,7 @@ const TurnControllerMechanism: React.FC<TurnControllerMechanismProps> = (props) 
                     value={value}
                 />
 
-                <ManualSlider value={value} setValue={setValue} text={'Permeability'}/>
+                <ManualSlider value={value} text={'Permeability'} handleChange={handleChange}/>
             </div>
             <br/>
 
