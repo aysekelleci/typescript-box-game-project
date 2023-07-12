@@ -3,6 +3,7 @@ import './App.css';
 import TurnControllerMechanism from './components/turnControllerMechanism';
 import {BoxMechanism} from "./components/boxMechanism";
 import {BoxProps} from "./components/atomicComponents/box";
+import {v4 as uuidv4} from "uuid";
 
 const App: React.FC = () => {
     const chapterInit:number= 1;
@@ -16,8 +17,10 @@ const App: React.FC = () => {
 
     const birth= chapter*turnCount+ turn
 
+    const [key, setKey] = useState(0)
+
     const [boxes, setBoxes] = useState<BoxProps[]>([
-        { color: "#5f8f79", width: 80, height: 80, percent, birth, numberValue: percent, index: 0, chapter: 0, setBoxes: () => {}, boxes: [], onDragStart: () => {}, },
+        { color: "#5f8f79", width: 80, height: 80, percent: 32, birth, numberValue: 32, index: 0, chapter: 0, setBoxes: () => {}, boxes: [], onDragStart: () => {},},
         { color: "#5f8f79", width: 80, height: 80, percent, birth, numberValue: percent, index: 1, chapter: 0, setBoxes: () => {}, boxes: [], onDragStart: () => {}, },
         { color: "#5f8f79", width: 80, height: 80, percent, birth, numberValue: percent, index: 2, chapter: 0, setBoxes: () => {}, boxes: [], onDragStart: () => {}, },
     ]);
@@ -38,7 +41,8 @@ const App: React.FC = () => {
 
 
 
-            <BoxMechanism percent={percent} birth={chapter*turnCount+ turn} boxes={boxes} setBoxes={setBoxes} />
+            <BoxMechanism percent={percent} birth={chapter*turnCount+ turn} boxes={boxes} setBoxes={setBoxes} key={key}
+                          setKey={setKey}/>
         </div>
       </div>
   );

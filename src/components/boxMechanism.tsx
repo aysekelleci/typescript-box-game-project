@@ -13,8 +13,11 @@ interface BoxMechanismProps {
     birth: number;
     boxes: BoxProps[];
     setBoxes: (boxes: BoxProps[]) => void;
+    key: number;
+    setKey: (key: number) => void;
 }
 export const BoxMechanism: React.FC<BoxMechanismProps> = (props) => {
+    //const [key, setKey] = useState(0);
     const [boxCounter, setBoxCounter] = useState(3);
     const percent = props.percent;
     const birth = props.birth;
@@ -35,53 +38,57 @@ export const BoxMechanism: React.FC<BoxMechanismProps> = (props) => {
         return Math.floor(totalMultiplication % 100);
     };
 
-    const handleDrop = (boxIndex: number) => {
+    const handleDrop = (boxIndex: number, type:string) => {
         if(boxIndex === -1 || isNaN(boxIndex)) {
             return props.boxes;
         }
 
-        const droppedBox2: BoxProps = outputBox[boxIndex];
-        if(droppedBox2 != undefined) {
-            const updatedOutputBoxes: BoxProps[] = [...outputBox];
-            updatedOutputBoxes.splice(boxIndex, 1);
+        if( type === 'output') {
+            const droppedBox2: BoxProps = outputBox[boxIndex];
+            if (droppedBox2 != undefined) {
+                const updatedOutputBoxes: BoxProps[] = [...outputBox];
+                updatedOutputBoxes.splice(boxIndex, 1);
 
-            setOutputBox((updatedOutputBoxes));
+                setOutputBox((updatedOutputBoxes));
 
-            //setBlock items
-            setInputBox((prevInputBox) => [
-                ...prevInputBox,
-                {...droppedBox2, percent: outputBox[boxIndex].numberValue }, // Update the percent value
-            ]);
+                //setBlock items
+                setInputBox((prevInputBox) => [
+                    ...prevInputBox,
+                    {...droppedBox2, percent: outputBox[boxIndex].numberValue}, // Update the percent value
+                ]);
 
-            return props.boxes;
+                return props.boxes;
+            }
         }
 
-        const droppedBox = props.boxes[boxIndex];
-        if( props.boxes[boxIndex] != null) {
-            setInputBox((prevInputBox) => [
-                ...prevInputBox,
-                {...droppedBox, percent: props.boxes[boxIndex].numberValue}, // Update the percent value
-            ]);
-            console.log('Box dropped:', boxIndex);
-            console.log(props.boxes[boxIndex].numberValue);
+        if( type === 'block') {
+            const droppedBox = props.boxes[boxIndex];
+            if (props.boxes[boxIndex] != null) {
+                setInputBox((prevInputBox) => [
+                    ...prevInputBox,
+                    {...droppedBox, percent: props.boxes[boxIndex].numberValue}, // Update the percent value
+                ]);
+                console.log('Box dropped:', boxIndex);
+                console.log(props.boxes[boxIndex].numberValue);
 
-            let experienceValue = Math.floor(calculateExperienceValue() * droppedBox.numberValue) % 100;
-            setValue(experienceValue);
+                let experienceValue = Math.floor(calculateExperienceValue() * droppedBox.numberValue) % 100;
+                setValue(experienceValue);
 
-            const updatedBox = [...props.boxes];
-            updatedBox.splice(boxIndex, 1);
+                const updatedBox = [...props.boxes];
+                updatedBox.splice(boxIndex, 1);
 
-            for (let i = 0; i < updatedBox.length; i++) {
-                updatedBox[i].index = i;
+                for (let i = 0; i < updatedBox.length; i++) {
+                    updatedBox[i].index = i;
+                }
+
+                props.setBoxes(updatedBox);
+                setBoxCounter(boxCounter - 1);
+                console.log(updatedBox);
             }
 
-            props.setBoxes(updatedBox);
-            setBoxCounter(boxCounter - 1);
-            console.log(updatedBox);
-        }
-
-        if( props.boxes[boxIndex] === null) {
-            return props.boxes;
+            if (props.boxes[boxIndex] === null) {
+                return props.boxes;
+            }
         }
     };
 
@@ -89,7 +96,7 @@ export const BoxMechanism: React.FC<BoxMechanismProps> = (props) => {
         <div style={{display: 'flex',  marginTop: '30px'}} >
             <BlockItem setOutputBox={setOutputBox} setInputBox={setInputBox} setBoxes={props.setBoxes} inputBox={inputBox}
                        outputBox={outputBox} boxes={props.boxes} setBoxCounter={setBoxCounter} boxCounter={boxCounter}
-                       birth={birth} percent={percent} />
+                       birth={birth} percent={percent} key={props.key} setKey={props.setKey}/>
 
             <div style={{display: 'flex', overflowX: 'scroll'}} >
                 <InputBox onDrop={handleDrop} inputBox={inputBox} birth={birth}/>

@@ -1,6 +1,7 @@
 import '../../App.css';
 import React, {useState} from "react";
 import {Box, BoxProps} from "./box";
+import { v4 as uuidv4 } from 'uuid';
 
 interface BlockItemProps {
     setOutputBox: (outputBoxes: BoxProps[]) => void;
@@ -13,50 +14,56 @@ interface BlockItemProps {
     boxCounter: number
     birth: number
     percent: number
+    key: number;
+    setKey: (key: number) => void;
 }
 export const BlockItem: React.FC<BlockItemProps> = (props) => {
-    const [updatedBoxes, setUpdatedBoxes] = useState<BoxProps[]>(props.boxes)
     const handleDragStart = (event: React.DragEvent<HTMLDivElement>, index:number) => {
-        event.dataTransfer.setData('text/plain', index.toString());
+        const data = 'block ' + index.toString();
+        event.dataTransfer.setData('text/plain', data);
     };
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
     };
     const handleOutputBoxDrop = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
-        const boxIndex: number = parseInt(event.dataTransfer.getData('text/plain'));
 
-        const droppedBox: BoxProps = props.outputBox[boxIndex];
+        //const boxIndex: number = parseInt(event.dataTransfer.getData('text/plain'));
+        const data = event.dataTransfer.getData('text/plain');
+        var words = data.split(" ");
+        let boxIndex = parseInt(words[1]);
+        let type = words[0];
 
-        if (droppedBox != undefined) {
-            const updatedOutputBoxes: BoxProps[] = [...props.outputBox];
-            updatedOutputBoxes.splice(boxIndex, 1);
+        //const boxType: string = event.dataTransfer.getData('text')
+        if( type === 'output') {
+            const droppedBox: BoxProps = props.outputBox[boxIndex];
+            if (droppedBox != undefined) {
+                const updatedOutputBoxes: BoxProps[] = [...props.outputBox];
+                updatedOutputBoxes.splice(boxIndex, 1);
 
-            props.setOutputBox((updatedOutputBoxes));
+                props.setOutputBox((updatedOutputBoxes));
 
-            //setBlock items
-            setUpdatedBoxes((prevBoxes) => [
-                ...prevBoxes,
-                {...droppedBox, percent: props.outputBox[boxIndex].numberValue}, // Update the percent value
-            ]);
-
-            props.setBoxes([...props.boxes, {...droppedBox, percent: props.outputBox[boxIndex].numberValue}]);
-            props.setBoxCounter(props.boxCounter + 1);
+                props.setBoxes([...props.boxes, {...droppedBox, percent: props.outputBox[boxIndex].numberValue}]);
+                props.setBoxCounter(props.boxCounter + 1);
+                return;
+            }
         }
 
-        //input to block item drop
-        const droppedBox2: BoxProps = props.inputBox[boxIndex];
-        console.log(droppedBox2, boxIndex);
-        if (droppedBox2 != undefined) {
+        if( type === 'input') {
+            //input to block item drop
+            const droppedBox2: BoxProps = props.inputBox[boxIndex];
+            console.log(droppedBox2, boxIndex);
+            if (droppedBox2 != undefined) {
 
-            const updatedInputBoxes: BoxProps[] = [...props.inputBox];
-            updatedInputBoxes.splice(boxIndex, 1);
+                const updatedInputBoxes: BoxProps[] = [...props.inputBox];
+                updatedInputBoxes.splice(boxIndex, 1);
 
-            props.setInputBox((updatedInputBoxes));
+                props.setInputBox((updatedInputBoxes));
 
-            props.setBoxes([...props.boxes, {...droppedBox2, percent: props.inputBox[boxIndex].numberValue}]);
-            props.setBoxCounter(props.boxCounter + 1);
-            return;
+                props.setBoxes([...props.boxes, {...droppedBox2, percent: props.inputBox[boxIndex].numberValue}]);
+                props.setBoxCounter(props.boxCounter + 1);
+                return;
+            }
         }
 
         else {
@@ -81,6 +88,7 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
             onDragStart: () => {}
         };
 
+        props.setKey(props.key+1);
         props.setBoxes([...props.boxes, newBox]);
     }
 
@@ -108,6 +116,7 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
                 <div style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column-reverse'}}>
                     {props.boxes.map((box, index) => (
                         <Box
+                            //key={box.key}
                             setBoxes={props.setBoxes} index={index} boxes={props.boxes}
                             color="#5f8f79"
                             width={130}

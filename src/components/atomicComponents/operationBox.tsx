@@ -296,9 +296,9 @@ export const OperationBox: React.FC<OperationBoxProps>= (props) => {
                 <div
                     ref={operationModalRef}
                     style={{backgroundColor: '#ffcc5c',
-                        position: 'relative',
-                        left: '80px',
-                        bottom: '200px',
+                        position: 'absolute',
+                        left: '600px',
+                        bottom: '150px',
                         width: '450px',
                         height: '400px',
                         border: '3px solid #73AD21',

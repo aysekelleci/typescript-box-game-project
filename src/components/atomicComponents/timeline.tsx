@@ -25,8 +25,13 @@ const Timeline: React.FC<TimelineProps> = (props) => {
             props.setTurn(1);
             props.setChapter(props.chapter + 1);
             let updatedBoxes = [...props.boxes];
-            for(let i=updatedBoxes.length-1; i>=0; i--) {
+            let count = 0;
+
+            //for(let i=updatedBoxes.length-1; i>=0; i--) {
+            for(let i=0; i<updatedBoxes.length; i++) {
                 if(updatedBoxes[i].numberValue < props.value) {
+                    updatedBoxes[i].index = count;
+                    count++;
                     updatedBoxes.splice(i, 1);
                 }
             }

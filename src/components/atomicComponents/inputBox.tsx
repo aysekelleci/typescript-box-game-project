@@ -1,8 +1,9 @@
 import {Box, BoxProps} from "./box";
 import React from "react";
+import { v4 as uuidv4 } from 'uuid';
 
 export interface InputBoxProps {
-    onDrop: (boxIndex: number) => void;
+    onDrop: (boxIndex: number, type:string) => void;
     inputBox: BoxProps[];
     birth: number;
 }
@@ -10,17 +11,22 @@ export interface InputBoxProps {
 export const InputBox: React.FC<InputBoxProps> = ({ onDrop, inputBox, birth }) => {
 
     const handleDragStart = (event: React.DragEvent<HTMLDivElement>, index:number) => {
-        event.dataTransfer.setData('text/plain', index.toString());
+        const data = 'input ' + index.toString();
+        event.dataTransfer.setData('text/plain', data);
+        //event.dataTransfer.setData('text', "input");
     };
 
     const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
         event.preventDefault();
-        let boxIndex:number = parseInt(event.dataTransfer.getData('text/plain'));
+        const data = event.dataTransfer.getData('text/plain');
+        let words = data.split(" ");
+        let boxIndex = parseInt(words[1]);
+        let type = words[0];
 
         //const droppedBoxIndex = boxIndex; // Convert boxIndex to an integer
         //const currentBoxIndex = inputBox.findIndex((box) => box.index === droppedBoxIndex); // Use appropriate condition to match the dropped box ID or index
 
-        onDrop(boxIndex); // Convert boxIndex to an integer
+        onDrop(boxIndex, type); // Convert boxIndex to an integer
     };
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -52,6 +58,7 @@ export const InputBox: React.FC<InputBoxProps> = ({ onDrop, inputBox, birth }) =
                 <div style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column-reverse' }}>
                     {inputBox.map((box, index) => (
                         <Box
+                            //key={uuidv4()}
                             setBoxes={() => {}} index={index} boxes={[]}
                             color="#ffcc5c"
                             width={130}

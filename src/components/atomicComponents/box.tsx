@@ -1,4 +1,5 @@
 import React, {CSSProperties, useEffect, useRef, useState} from "react";
+import {v4 as uuidv4} from "uuid";
 
 export interface BoxProps {
     color: string;
@@ -13,6 +14,7 @@ export interface BoxProps {
     boxes: BoxProps[]
     onDragStart: (e: React.DragEvent<HTMLDivElement>, index: number) => void;
     children?: React.ReactNode;
+    //key: number;
 }
 export const Box: React.FC<BoxProps> = (props) => {
     const [modalOpen, setModalOpen] = useState(false);

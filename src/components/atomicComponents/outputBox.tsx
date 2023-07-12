@@ -8,7 +8,9 @@ interface OutputBoxProps {
 
 export const OutputBox: React.FC<OutputBoxProps>= ({ outputBoxes, birth}) => {
     const handleDragStart = (event:React.DragEvent<HTMLDivElement>, index:string) => {
-        event.dataTransfer.setData('text/plain', index);
+        const data = "output " + index;
+        event.dataTransfer.setData('text/plain', data);
+        //event.dataTransfer.setData('text', "output");
     };
     return (
         <div>
