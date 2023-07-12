@@ -1,6 +1,5 @@
 import {Box, BoxProps} from "./box";
 import React from "react";
-import { v4 as uuidv4 } from 'uuid';
 
 export interface InputBoxProps {
     onDrop: (boxIndex: number, type:string) => void;
@@ -58,7 +57,8 @@ export const InputBox: React.FC<InputBoxProps> = ({ onDrop, inputBox, birth }) =
                 <div style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column-reverse' }}>
                     {inputBox.map((box, index) => (
                         <Box
-                            //key={uuidv4()}
+                            key={box.id}
+                            id={box.id}
                             setBoxes={() => {}} index={index} boxes={[]}
                             color="#ffcc5c"
                             width={130}

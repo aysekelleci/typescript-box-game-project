@@ -20,9 +20,9 @@ const App: React.FC = () => {
     const [key, setKey] = useState(0)
 
     const [boxes, setBoxes] = useState<BoxProps[]>([
-        { color: "#5f8f79", width: 80, height: 80, percent: 32, birth, numberValue: 32, index: 0, chapter: 0, setBoxes: () => {}, boxes: [], onDragStart: () => {},},
-        { color: "#5f8f79", width: 80, height: 80, percent, birth, numberValue: percent, index: 1, chapter: 0, setBoxes: () => {}, boxes: [], onDragStart: () => {}, },
-        { color: "#5f8f79", width: 80, height: 80, percent, birth, numberValue: percent, index: 2, chapter: 0, setBoxes: () => {}, boxes: [], onDragStart: () => {}, },
+        { color: "#5f8f79", width: 80, height: 80, percent: 32, birth, numberValue: 32, index: 0, chapter: 0, setBoxes: () => {}, boxes: [], onDragStart: () => {}, id:0},
+        { color: "#5f8f79", width: 80, height: 80, percent, birth, numberValue: percent, index: 1, chapter: 0, setBoxes: () => {}, boxes: [], onDragStart: () => {},id:1},
+        { color: "#5f8f79", width: 80, height: 80, percent, birth, numberValue: percent, index: 2, chapter: 0, setBoxes: () => {}, boxes: [], onDragStart: () => {}, id:2},
     ]);
 
   return (

@@ -14,7 +14,7 @@ export interface BoxProps {
     boxes: BoxProps[]
     onDragStart: (e: React.DragEvent<HTMLDivElement>, index: number) => void;
     children?: React.ReactNode;
-    //key: number;
+    id: number;
 }
 export const Box: React.FC<BoxProps> = (props) => {
     const [modalOpen, setModalOpen] = useState(false);
@@ -32,7 +32,6 @@ export const Box: React.FC<BoxProps> = (props) => {
                 }
             }
         };
-
         window.addEventListener('click', handleClickOutside);
 
         return () => {
@@ -85,6 +84,7 @@ export const Box: React.FC<BoxProps> = (props) => {
         fontSize: '12px',
     };
 
+    //ages of boxes are determined according to turn count passing after box was created
     const age = props.chapter - props.birth;
 
     return (

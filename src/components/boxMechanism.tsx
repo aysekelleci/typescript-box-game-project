@@ -34,7 +34,6 @@ export const BoxMechanism: React.FC<BoxMechanismProps> = (props) => {
         inputBox.forEach((box: BoxProps) => {
             totalMultiplication *= box.numberValue;
         });
-
         return Math.floor(totalMultiplication % 100);
     };
 
@@ -68,8 +67,8 @@ export const BoxMechanism: React.FC<BoxMechanismProps> = (props) => {
                     ...prevInputBox,
                     {...droppedBox, percent: props.boxes[boxIndex].numberValue}, // Update the percent value
                 ]);
-                console.log('Box dropped:', boxIndex);
-                console.log(props.boxes[boxIndex].numberValue);
+                //console.log('Box dropped:', boxIndex);
+                //console.log(props.boxes[boxIndex].numberValue);
 
                 let experienceValue = Math.floor(calculateExperienceValue() * droppedBox.numberValue) % 100;
                 setValue(experienceValue);
@@ -83,7 +82,7 @@ export const BoxMechanism: React.FC<BoxMechanismProps> = (props) => {
 
                 props.setBoxes(updatedBox);
                 setBoxCounter(boxCounter - 1);
-                console.log(updatedBox);
+                //console.log(updatedBox);
             }
 
             if (props.boxes[boxIndex] === null) {
@@ -102,7 +101,7 @@ export const BoxMechanism: React.FC<BoxMechanismProps> = (props) => {
                 <InputBox onDrop={handleDrop} inputBox={inputBox} birth={birth}/>
 
                 <OperationBox inputBox={inputBox} setOutputBox={setOutputBox} setInputBox={setInputBox} birth={birth}
-                    boxes={props.boxes} value={value} setValue={setValue}/>
+                    boxes={props.boxes} value={value} setValue={setValue} key={props.key} setKey={props.setKey}/>
 
                 <OutputBox outputBoxes={outputBox} birth={birth} />
             </div>

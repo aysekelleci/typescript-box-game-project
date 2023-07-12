@@ -52,7 +52,6 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
         if( type === 'input') {
             //input to block item drop
             const droppedBox2: BoxProps = props.inputBox[boxIndex];
-            console.log(droppedBox2, boxIndex);
             if (droppedBox2 != undefined) {
 
                 const updatedInputBoxes: BoxProps[] = [...props.inputBox];
@@ -75,6 +74,7 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
         props.setBoxCounter(props.boxes.length + 1);
 
         const newBox: BoxProps = {
+            id: props.key,
             color: "#5f8f79",
             percent: props.percent,
             birth: props.birth,
@@ -116,7 +116,8 @@ export const BlockItem: React.FC<BlockItemProps> = (props) => {
                 <div style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column-reverse'}}>
                     {props.boxes.map((box, index) => (
                         <Box
-                            //key={box.key}
+                            id={box.id}
+                            key={box.id}
                             setBoxes={props.setBoxes} index={index} boxes={props.boxes}
                             color="#5f8f79"
                             width={130}

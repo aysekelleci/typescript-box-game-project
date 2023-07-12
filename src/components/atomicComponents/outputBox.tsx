@@ -37,6 +37,8 @@ export const OutputBox: React.FC<OutputBoxProps>= ({ outputBoxes, birth}) => {
                 <div style={{ marginLeft: '10px', display: 'flex', flexDirection: 'column-reverse'}}>
                     {outputBoxes.map((box, index) => (
                         <Box
+                            key = {box.id}
+                            id = {box.id}
                             setBoxes={() => {}} index={index} boxes={[]}
                             color="#ff6f69"
                             width={130}

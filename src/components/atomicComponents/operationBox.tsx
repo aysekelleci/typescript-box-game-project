@@ -11,6 +11,8 @@ interface OperationBoxProps {
     boxes: BoxProps[];
     value: number;
     setValue: (value: number) => void
+    key: number;
+    setKey: (key: number) => void;
 }
 
 export const OperationBox: React.FC<OperationBoxProps>= (props) => {
@@ -110,6 +112,7 @@ export const OperationBox: React.FC<OperationBoxProps>= (props) => {
         const newBoxes: BoxProps[] = [];
         for (let i = 0; i < length; i++) {
             const newBox: BoxProps = {
+                id: props.key,
                 color: "#5f8f79",
                 width: 80,
                 height: 80,
@@ -127,6 +130,7 @@ export const OperationBox: React.FC<OperationBoxProps>= (props) => {
         props.setOutputBox(newBoxes);
 
         props.setInputBox([]);
+        props.setKey(props.key+1);
     };
 
     function handleOperation() {
