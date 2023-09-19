@@ -65,9 +65,8 @@ export const BoxMechanism: React.FC<BoxMechanismProps> = (props) => {
                     ...prevInputBox,
                     {...droppedBox, percent: props.boxes[boxIndex].numberValue}, // Update the percent value
                 ]);
-                //console.log('Box dropped:', boxIndex);
-                //console.log(props.boxes[boxIndex].numberValue);
-
+                
+                //calculate experience value
                 let experienceValue = Math.floor(calculateExperienceValue() * droppedBox.numberValue) % 100;
                 setValue(experienceValue);
 
