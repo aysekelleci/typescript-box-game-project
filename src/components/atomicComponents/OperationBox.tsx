@@ -47,7 +47,7 @@ export const OperationBox: React.FC<OperationBoxProps>= (props) => {
         ]
     })
 
-
+    //open/close modal functions
     const handleOpenModal = () => {
         setModalOpen(true);
     };
